@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}VSPM - Vit Sales Prediction Model{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --premium-gold: #FFD700;
+            --premium-gold-dark: #DAA520;
+            --premium-black: #1A1A1A;
+            --premium-black-matte: #2F2F2F;
+            --premium-silver: #C0C0C0;
+            --premium-white: #FAFAFA;
+            --premium-gradient: linear-gradient(135deg, #FFD700, #DAA520, #B8860B);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--premium-black);
+            color: var(--premium-white);
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background: rgba(26, 26, 26, 0.95) !important;
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: var(--premium-gold) !important;
+        }
+
+        .nav-link {
+            color: var(--premium-white) !important;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--premium-gold) !important;
+        }
+
+        .card {
+            background: rgba(47, 47, 47, 0.8);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 15px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+            transition: all 0.4s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--premium-gold);
+        }
+
+        .btn-primary {
+            background: var(--premium-gradient);
+            color: var(--premium-black);
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #2F2F2F, #1A1A1A);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            background: var(--premium-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stats-card {
+            background: rgba(47, 47, 47, 0.9);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .stats-card.gold {
+            border-color: var(--premium-gold);
+        }
+
+        .stats-card.silver {
+            border-color: var(--premium-silver);
+        }
+
+        .upload-area {
+            border: 3px dashed rgba(255, 215, 0, 0.4);
+            border-radius: 20px;
+            background: rgba(47, 47, 47, 0.5);
+            padding: 3rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            border-color: var(--premium-gold);
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        .table {
+            background: rgba(47, 47, 47, 0.8);
+            color: var(--premium-white);
+            border-radius: 15px;
+        }
+
+        .table th {
+            background: rgba(255, 215, 0, 0.1);
+            color: var(--premium-gold);
+            border: none;
+        }
+
+        .form-control,
+        .form-select {
+            background: rgba(47, 47, 47, 0.8);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            color: var(--premium-white);
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            background: rgba(47, 47, 47, 0.9);
+            border-color: var(--premium-gold);
+            color: var(--premium-white);
+            box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.25);
+        }
+
+        .alert {
+            border: none;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        footer {
+            background: rgba(26, 26, 26, 0.95);
+            border-top: 1px solid rgba(255, 215, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <i class="fas fa-chart-line me-2"></i>VSPM
+                <small style="font-size: 0.6em; display: block; margin-top: -5px; color: #FAFAFA;">VIT Sales Prediction
+                    Model</small>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">
+                            <i class="fas fa-home me-1"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('upload_file') }}">
+                            <i class="fas fa-upload me-1"></i>Upload Data
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('dashboard') }}">
+                            <i class="fas fa-chart-bar me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('predict') }}">
+                            <i class="fas fa-brain me-1"></i>Predict
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="container" style="margin-top: 100px;">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show"
+            role="alert">
+            <i
+                class="fas fa-{{ 'exclamation-triangle' if category == 'warning' else 'check-circle' if category == 'success' else 'info-circle' }} me-2"></i>
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <!-- Main Content -->
+    <main {% if request.endpoint=='index' %}style="margin-top: 0;" {% else %}style="margin-top: 100px;" {% endif %}>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-2">&copy; SY(I) <span style="color: var(--premium-gold); font-weight: 600;"> ICE</span></p>
+            <p><small style="color: var(--premium-silver);">Sale Prediction Model - DATA SCIENCE </small></p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>
