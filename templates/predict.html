@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block title %}Prediction - SalesCast Pro{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="text-center mb-5">
+                <h1 class="display-4" style="color: var(--premium-gold);">
+                    <i class="fas fa-brain me-3"></i>Prediction Suite
+                </h1>
+                <p class="lead">Machine Learning Models with Analytics</p>
+            </div>
+        </div>
+    </div>
+
+    {% if not show_results %}
+    <!-- Configuration Form -->
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header text-center py-4"
+                    style="background: var(--premium-gradient); color: var(--premium-black);">
+                    <h4><i class="fas fa-cog me-2"></i>Model Configuration</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="target_column" class="form-label" style="color: var(--premium-white);">
+                                    <i class=" fas fa-bullseye me-2" style="color: var(--premium-gold);"></i>Target
+                                    Column (What to predict)
+                                </label>
+                                <select class="form-select" name="target_column" id="target_column" required>
+                                    <option value="">Select target column...</option>
+                                    {% for column in numeric_columns %}
+                                    <option value="{{ column }}">{{ column }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="model_type" class="form-label" style="color: var(--premium-white);">
+                                    <i class="fas fa-robot me-2" style="color: var(--premium-gold);"></i>Model
+                                </label>
+
+                                <select class="form-select" name="model_type" id="model_type" required>
+                                    <option value="linear">Linear Regression</option>
+                                    <option value="ridge">Ridge Regression</option>
+                                    <option value="forest">Random Forest</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" style="color: antiquewhite;">
+                                <i class="fas fa-list me-2" style="color: var(--premium-gold);"></i>Feature Columns
+                                (Input variables)
+                            </label>
+                            <div class="row" style="color: antiquewhite;">
+                                {% for column in numeric_columns %}
+                                <div class="col-md-4 mb-2" style="color: antiquewhite;">
+                                    <div class="form-check" style="color: antiquewhite;">
+                                        <input class="form-check-input" type="checkbox" name="feature_columns"
+                                            value="{{ column }}" id="feature_{{ loop.index }}">
+                                        <label class="form-check-label" for="feature_{{ loop.index }}">
+                                            {{ column }}
+                                        </label>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="text-center" style="color: antiquewhite;">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-magic me-2"></i>Train Model
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if show_results and results %}
+    <!-- Results -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="stats-card gold">
+                <div class="text-center">
+                    <div class="h2 mb-2" style="color: var(--premium-gold);">{{ results.r2 }}</div>
+                    <h6 class="mb-0">R² Score</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card">
+                <div class="text-center">
+                    <div class="h2 mb-2" style="color: var(--premium-gold);">{{ results.mae }}</div>
+                    <h6 class="mb-0">Mean Absolute Error</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card">
+                <div class="text-center">
+                    <div class="h2 mb-2" style="color: var(--premium-gold);">{{ results.rmse }}</div>
+                    <h6 class="mb-0">RMSE</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card">
+                <div class="text-center">
+                    <div class="h2 mb-2" style="color: var(--premium-gold);">{{ results.model_performance }}</div>
+                    <h6 class="mb-0">Performance</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Model Info -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 style="color: antiquewhite;"><i class="fas fa-info-circle me-2"></i>Model Configuration</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4" style="color: antiquewhite;">
+                            <strong style="color: var(--premium-gold);">Target Variable:</strong> {{
+                            results.target_column }}
+                        </div>
+                        <div class="col-md-4" style="color: antiquewhite;">
+                            <strong style="color: var(--premium-gold);">Model Type:</strong> {{ results.model_type|title
+                            }}
+                        </div>
+                        <div class="col-md-4" style="color: antiquewhite;">
+                            <strong style="color: var(--premium-gold);">Features Used:</strong> {{
+                            results.feature_columns|length }}
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <strong style="color: var(--premium-gold);">Feature Columns:</strong>
+                        {% for feature in results.feature_columns %}
+                        <span class="badge bg-secondary me-1">{{ feature }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Future Predictions -->
+    {% if results.future_predictions %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 style="color: antiquewhite;"><i class="fas fa-crystal-ball me-2"></i>Future Predictions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% for prediction in results.future_predictions[:6] %}
+                        <div class="col-md-2 text-center mb-3">
+                            <div class="stats-card">
+                                <div class="h4" style="color: var(--premium-gold);">{{ "%.2f"|format(prediction) }}
+                                </div>
+                                <small style="color: antiquewhite;">Period {{ loop.index }}</small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="text-center mt-4">
+        <a href="{{ url_for('predict') }}" class="btn btn-primary me-2">
+            <i class="fas fa-redo me-2"></i>Try Different Model
+        </a>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-chart-bar me-2"></i>Back to Dashboard
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

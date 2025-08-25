@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - VSPM {% endblock %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="text-center mb-5">
+                <h1 class="display-4" style="color: var(--premium-gold);">
+                    <i class="fas fa-chart-line me-3"></i>Premium Analytics Dashboard
+                </h1>
+                <p class="lead">Professional Data Intelligence & Advanced Analytics</p>
+                <a href="{{ url_for('predict') }}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-brain me-2"></i>Generate Predictions
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-5">
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="stats-card gold">
+                <div class="text-center">
+                    <i class="fas fa-database fa-3x mb-3" style="color: var(--premium-gold);"></i>
+                    <div class="h2 mb-2" style="color: var(--premium-gold);">{{ stats.total_rows | default('0') }}</div>
+                    <h6 class="mb-0">Total Records</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="stats-card silver">
+                <div class="text-center">
+                    <i class="fas fa-columns fa-3x mb-3" style="color: var(--premium-silver);"></i>
+                    <div class="h2 mb-2" style="color: var(--premium-silver);">{{ stats.total_columns | default('0') }}
+                    </div>
+                    <h6 class="mb-0">Total Columns</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="stats-card">
+                <div class="text-center">
+                    <i class="fas fa-chart-bar fa-3x mb-3" style="color: var(--premium-gold);"></i>
+                    <div class="h2 mb-2" style="color: var(--premium-gold);">{{ stats.numeric_columns | default('0') }}
+                    </div>
+                    <h6 class="mb-0">Numeric Fields</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="stats-card">
+                <div class="text-center">
+                    <i class="fas fa-check-circle fa-3x mb-3" style="color: var(--premium-gold);"></i>
+                    <div class="h2 mb-2" style="color: var(--premium-gold);">Ready</div>
+                    <h6 class="mb-0">Status</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Information -->
+    {% if stats %}
+    <div class="row mb-4">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 style="color: antiquewhite;"><i class="fas fa-list me-2"></i>Column Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Column</th>
+                                    <th>Data Type</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for column in stats.columns %}
+                                <tr>
+                                    <td><strong>{{ column }}</strong></td>
+                                    <td><span class="badge bg-secondary">{{ stats.data_types[column] }}</span></td>
+                                    <td>
+                                        {% if stats.data_types[column] == 'numeric' %}
+                                        <span class="badge bg-success">ML Ready</span>
+                                        {% else %}
+                                        <span class="badge bg-secondary">Text</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 style="color: antiquewhite;"><i class="fas fa-info-circle me-2"></i>Dataset Summary</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between" style="background: transparent;">
+                            <strong style="color: var(--premium-gold);">Total Rows:</strong>
+                            <span>{{ stats.total_rows }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between" style="background: transparent;">
+                            <strong style="color: var(--premium-gold);">Total Columns:</strong>
+                            <span>{{ stats.total_columns }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between" style="background: transparent;">
+                            <strong style="color: var(--premium-gold);">Numeric Fields:</strong>
+                            <span>{{ stats.numeric_columns }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between" style="background: transparent;">
+                            <strong style="color: var(--premium-gold);">ML Ready:</strong>
+                            <span class="badge bg-success">Yes</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Charts Section -->
+    {% if charts %}
+    <div class="row">
+        {% if charts.distribution %}
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 style="color: antiquewhite;"><i class="fas fa-chart-bar me-2"></i>Data Distribution</h5>
+                </div>
+                <div class="card-body">
+                    <div id="distribution-chart"></div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if charts.scatter %}
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 style="color: antiquewhite;"><i class="fas fa-braille me-2"></i>Scatter Plot</h5>
+                </div>
+                <div class="card-body">
+                    <div id="scatter-chart"></div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <div class="text-center mt-4">
+        <a href="{{ url_for('upload_file') }}" class="btn btn-outline-primary me-2">
+            <i class="fas fa-upload me-2"></i>Upload New Data
+        </a>
+        <a href="{{ url_for('predict') }}" class="btn btn-success">
+            <i class="fas fa-brain me-2"></i>Start Prediction
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    {% if charts %}
+    {% if charts.distribution %}
+    var distributionData = {{ charts.distribution | safe }};
+    Plotly.newPlot('distribution-chart', distributionData.data, distributionData.layout, { responsive: true });
+    {% endif %}
+
+    {% if charts.scatter %}
+    var scatterData = {{ charts.scatter | safe }};
+    Plotly.newPlot('scatter-chart', scatterData.data, scatterData.layout, { responsive: true });
+    {% endif %}
+    {% endif %}
+</script>
+{% endblock %}

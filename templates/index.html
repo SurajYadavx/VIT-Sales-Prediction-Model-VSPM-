@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}VSPM - Vit Sales Prediction Model{% endblock %}
+
+{% block content %}
+<!-- Premium Hero Section -->
+<div class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="hero-content">
+                    <h1 class="display-3 fw-bold mb-4">
+                        <i class="fas fa-chart-line me-3"></i>VSPM
+                        <span class="d-block" style="font-size: 0.4em; color: var(--premium-gold); margin-top: 10px;">
+                            VIT Sales Prediction Model
+                        </span>
+                    </h1>
+                    <p class="lead mb-4" style="color: var(--premium-white); font-size: 1.3rem;">
+                        Transform your sales data into <strong style="color: var(--premium-gold);">intelligent
+                            predictions</strong>
+                        with our analytics platform. Experience best machine learning and visualizations.
+                    </p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="{{ url_for('upload_file') }}" class="btn btn-primary btn-lg px-5">
+                            <i class="fas fa-rocket me-2"></i>Start Analysis
+                        </a>
+                        <a href="#features" class="btn btn-outline-primary btn-lg px-5">
+                            <i class="fas fa-crown me-2"></i>Explore Features
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="text-center">
+                    <div class="card">
+                        <div class="card-body p-5">
+                            <i class="fas fa-brain fa-5x mb-4" style="color: var(--premium-gold);"></i>
+                            <h3 style="color: var(--premium-gold); font-family: 'Playfair Display', serif;">
+                                Advanced Intelligence
+                            </h3>
+                            <p style="color: var(--premium-white);">
+                                machine learning algorithms with analytics
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<section id="features" class="py-5" style="background: rgba(47, 47, 47, 0.3);">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h2 class="display-5 fw-bold mb-3"
+                    style="font-family: 'Playfair Display', serif; color: var(--premium-gold);">
+                    Features
+                </h2>
+                <p class="lead" style="color: var(--premium-white);">
+                    analytics and advanced models
+                </p>
+            </div>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-robot fa-3x mb-3" style="color: var(--premium-gold);"></i>
+                        <h5 style="color: var(--premium-gold);">Advanced Models</h5>
+                        <p style="color: var(--premium-white);">
+                            machine learning algorithms for precise predictions.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-chart-pie fa-3x mb-3" style="color: var(--premium-silver);"></i>
+                        <h5 style="color: var(--premium-gold);">Visualizations</h5>
+                        <p style="color: var(--premium-white);">
+                            Interactive charts with styling and design.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-crown fa-3x mb-3" style="color: var(--premium-gold);"></i>
+                        <h5 style="color: var(--premium-gold);">Design</h5>
+                        <p style="color: var(--premium-white);">
+                            Good UI
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card text-center" style="background: var(--premium-gradient); border: none;">
+                    <div class="card-body py-5">
+                        <h2 class="display-5 fw-bold mb-3"
+                            style="color: var(--premium-black); font-family: 'Playfair Display', serif;">
+                            Ready for Analytics?
+                        </h2>
+                        <p class="lead mb-4" style="color: rgba(0, 0, 0, 0.8);">
+                            Experience the future of sales prediction with our platform
+                        </p>
+                        <a href="{{ url_for('upload_file') }}" class="btn btn-dark btn-lg px-5 py-3">
+                            <i></i>Start Experience
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

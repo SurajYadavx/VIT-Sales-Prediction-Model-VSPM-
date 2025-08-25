@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Data - SalesCast Pro{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg">
+                <div class="card-header text-center py-4"
+                    style="background: var(--premium-gradient); color: var(--premium-black);">
+                    <h3><i class="fas fa-upload me-2"></i>Upload Your Sales Data</h3>
+                </div>
+                <div class="card-body p-5">
+                    <form method="POST" enctype="multipart/form-data" id="uploadForm">
+                        <div class="upload-area text-center mb-4" id="uploadArea">
+                            <i class="fas fa-cloud-upload-alt fa-5x text-muted mb-3"></i>
+                            <h4 style="color: antiquewhite;">Drag and drop your CSV file here</h4>
+                            <p style="color: antiquewhite;">or click to browse files</p>
+                            <input type="file" name="file" id="fileInput" accept=".csv" required class="d-none">
+                            <button type="button" class="btn btn-primary"
+                                onclick="document.getElementById('fileInput').click()">
+                                <i class="fas fa-folder-open me-2"></i>Browse Files
+                            </button>
+                        </div>
+
+                        <div id="fileInfo" class="alert alert-info d-none">
+                            <strong>Selected file:</strong> <span id="fileName"></span>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success btn-lg" id="uploadBtn" disabled>
+                                <i class="fas fa-upload me-2"></i>Upload & Analyze
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Requirements -->
+                    <div class="mt-5">
+                        <h5 style="color: antiquewhite;"><i class="fas fa-info-circle me-2"></i>File Requirements</h5>
+                        <ul class="list-unstyled">
+                            <li style="color: rgb(40, 255, 2);"><i class="fas fa-check text-success me-2"></i>CSV format
+                                only</li>
+                            <li style="color: rgb(40, 255, 2);"><i class="fas fa-check text-success me-2"></i>Maximum
+                                file
+                                size: 16MB</li>
+                            <li style="color: rgb(40, 255, 2);"><i class="fas fa-check text-success me-2"></i>Include
+                                column headers</li>
+                            <li style="color: rgb(40, 255, 2);"><i class="fas fa-check text-success me-2"></i>Numeric
+                                data
+                                for predictions</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const uploadBtn = document.getElementById('uploadBtn');
+
+        fileInput.addEventListener('change', function (e) {
+            if (e.target.files.length > 0) {
+                const file = e.target.files[0];
+                fileName.textContent = file.name;
+                fileInfo.classList.remove('d-none');
+                uploadBtn.disabled = false;
+            }
+        });
+
+        uploadArea.addEventListener('dragover', function (e) {
+            e.preventDefault();
+            uploadArea.classList.add('drag-over');
+        });
+
+        uploadArea.addEventListener('dragleave', function (e) {
+            e.preventDefault();
+            uploadArea.classList.remove('drag-over');
+        });
+
+        uploadArea.addEventListener('drop', function (e) {
+            e.preventDefault();
+            uploadArea.classList.remove('drag-over');
+
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                fileName.textContent = files[0].name;
+                fileInfo.classList.remove('d-none');
+                uploadBtn.disabled = false;
+            }
+        });
+    });
+</script>
+{% endblock %}
